@@ -13,6 +13,10 @@ hands = mpHands.Hands()
 # to draw line between the landmarks predefined function is used
 mpDraw = mp.solutions.drawing_utils
 
+# setting time intervals
+pTime = 0
+cTime = 0
+
 while True:
     success, img = cap.read()
 
@@ -34,6 +38,20 @@ while True:
 
             # using mediapipe we can create those landmark points and joining those points using line
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
+
+    # creating frame rate
+
+    # getting current time
+    cTime = time.time()
+
+    # creating fps
+    fps = 1/(cTime-pTime)
+    pTime = cTime
+
+    # displaying fps
+
+    cv2.putText(img, str(int(fps)), (10, 70),
+                cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
 
     cv2.imshow('Image', img)
     cv2.waitKey(1)
