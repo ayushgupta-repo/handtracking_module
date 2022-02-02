@@ -33,7 +33,7 @@ while True:
         for handLms in results.multi_hand_landmarks:
 
             # using mediapipe we can create those landmark points and joining those points using line
-            mpDraw.draw_landmarks(img, handLms)
+            mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
 
     cv2.imshow('Image', img)
     cv2.waitKey(1)
