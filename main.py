@@ -42,9 +42,17 @@ while True:
 
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
+
+            # Accessing the object landmark by creating lm as in loop
             for lm in hand_landmarks.landmark:
+
+                # fetching the height and width of an hand landmark image
                 height, width, channel = img.shape
+
+                # getting those dimensions converted into specific format
                 cx, cy = int(lm.x * height), int(lm.y * width)
+
+                # appending those values processed above
                 res.append(cx)
                 res.append(cy)
                 # cv2.circle(img, (cx, cy), 10, (0, 0, 0), cv2.FILLED)
