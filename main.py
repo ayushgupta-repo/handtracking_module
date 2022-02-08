@@ -29,7 +29,28 @@ while True:
     # Extracting hands if multiple present
 
     # Simple result will only return class but to do detection of hand we have to add results.multi_hand_landmarks
+    res = []
+
+    # Extracting necessary informations
+    # if results.multi_hand_landmarks:
+    #     x = results.multi_hand_landmarks[0]
+    #     y = results.multi_hand_landmarks[1]
+    #     res.append(x)
+    #     res.append(y)
     # print(results.multi_hand_landmarks)
+    # print(res)
+
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            for lm in hand_landmarks.landmark:
+                height, width, channel = img.shape
+                cx, cy = int(lm.x * height), int(lm.y * width)
+                res.append(cx)
+                res.append(cy)
+                # cv2.circle(img, (cx, cy), 10, (0, 0, 0), cv2.FILLED)
+
+                print(res)
+                res = []
 
     if results.multi_hand_landmarks:
 
