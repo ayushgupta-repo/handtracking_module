@@ -40,30 +40,46 @@ while True:
     # print(results.multi_hand_landmarks)
     # print(res)
 
-    if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
+    # if results.multi_hand_landmarks:
+    #     for hand_landmarks in results.multi_hand_landmarks:
 
-            # Accessing the object landmark by creating lm as in loop
-            for lm in hand_landmarks.landmark:
+    #         # Accessing the object landmark by creating lm as in loop
+    #         for lm in hand_landmarks.landmark:
 
-                # fetching the height and width of an hand landmark image
-                height, width, channel = img.shape
+    #             # fetching the height and width of an hand landmark image
+    #             height, width, channel = img.shape
 
-                # getting those dimensions converted into specific format
-                cx, cy = int(lm.x * height), int(lm.y * width)
+    #             # getting those dimensions converted into specific format
+    #             cx, cy = int(lm.x * height), int(lm.y * width)
 
-                # appending those values processed above
-                res.append(cx)
-                res.append(cy)
-                # cv2.circle(img, (cx, cy), 10, (0, 0, 0), cv2.FILLED)
+    #             # appending those values processed above
+    #             res.append(cx)
+    #             res.append(cy)
+    #             # cv2.circle(img, (cx, cy), 10, (0, 0, 0), cv2.FILLED)
 
-                print(res)
-                res = []
+    #             print(res)
+    #             res = []
 
     if results.multi_hand_landmarks:
 
         # handLms = hand numbers
         for handLms in results.multi_hand_landmarks:
+
+            # getting id of landmark and x and y positions in form of pixels values
+
+            for id, lm in enumerate(handLms.landmark):
+
+                # getting the dimensions of screens to convert positions into pixels
+                h, w, c = img.shape
+
+                # converting decimal positions of x and y into pixel values
+                cx, cy = int(lm.x*w), int(lm.y*h)
+
+                # printing id and positions(pixels) in console
+                print(id, cx, cy)
+
+                # drawing circle on landmarks
+                cv2.circle(img, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
 
             # using mediapipe we can create those landmark points and joining those points using line
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
