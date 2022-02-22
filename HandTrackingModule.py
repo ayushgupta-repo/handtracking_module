@@ -27,10 +27,10 @@ class handleDetector():
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         # Below will process frames of the image
-        results = self.hands.process(imgRGB)
+        self.results = self.hands.process(imgRGB)
 
-        if results.multi_hand_landmarks:
-            for handLms in results.multi_hand_landmarks:
+        if self.results.multi_hand_landmarks:
+            for handLms in self.results.multi_hand_landmarks:
 
                 if draw:
 
@@ -39,6 +39,25 @@ class handleDetector():
                         img, handLms, self.mpHands.HAND_CONNECTIONS)
 
         return img
+
+    def findPosition(self, img, handNumber=0, draw=True):
+        landmarkList = []
+
+        if self.results.multi_hand_landmarks:
+            myHand = self.results.multi_hand_landmarks[handNumber]
+
+            for ids, lm in enumerate(myHand.landmark):
+                h, w, c = img.shape
+
+                cx, cy = int(lm.x*w), int(lm.y*h)
+
+                # print(id, cx, cy)
+                landmarkList.append([ids, cx, cy])
+
+                # drawing circle on landmarks
+                cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+
+        return landmarkList
 
         # # getting id of landmark and x and y positions in form of pixels values
 
@@ -67,6 +86,10 @@ def main():
     while True:
         success, img = cap.read()
         img = detector.findHands(img)
+        lndmarkList = detector.findPosition(img)
+
+        if len(detector.findPosition(img)) != 0:
+            print(lndmarkList[:])
 
         # creating frame rate
 
@@ -83,7 +106,11 @@ def main():
                     cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
 
         cv2.imshow('Image', img)
-        cv2.waitKey(1)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
