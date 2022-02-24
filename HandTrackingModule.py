@@ -5,7 +5,7 @@ import time
 # creating class
 
 
-class handleDetector():
+class handDetector():
     def __init__(self, mode=False, maxHands=2, modelComplexity=1, detectionCon=0.5, trackCon=0.5):
         self.mode = mode
         self.maxHands = maxHands
@@ -55,7 +55,8 @@ class handleDetector():
                 landmarkList.append([ids, cx, cy])
 
                 # drawing circle on landmarks
-                cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
+                if draw:
+                    cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
 
         return landmarkList
 
@@ -81,15 +82,15 @@ def main():
     cap = cv2.VideoCapture(0)
 
     # creating detector object
-    detector = handleDetector()
+    detector = handDetector()
 
     while True:
         success, img = cap.read()
         img = detector.findHands(img)
         lndmarkList = detector.findPosition(img)
 
-        if len(detector.findPosition(img)) != 0:
-            print(lndmarkList[:])
+        if len(lndmarkList) != 0:
+            print(lndmarkList[4])
 
         # creating frame rate
 
